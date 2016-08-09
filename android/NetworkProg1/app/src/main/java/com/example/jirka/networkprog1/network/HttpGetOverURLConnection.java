@@ -16,13 +16,27 @@ import java.net.URL;
  */
 public class HttpGetOverURLConnection extends AsyncTask<String, String, String> {
 
+
+    public interface HttpReadListener {
+        void onHttpReadFinished ();
+
+    }
+
     TextView tvOutputTextView = null;
     StringBuffer responseData;
+    HttpReadListener httpReadListener = null;
+
+
 
 
     public void  setTvOutputTextView (TextView tv) {
         this.tvOutputTextView = tv;
     }
+
+    public void setHttpReadListener (HttpReadListener listener) {
+        this.httpReadListener = listener;
+    }
+
 
 
         @Override
@@ -55,6 +69,7 @@ public class HttpGetOverURLConnection extends AsyncTask<String, String, String> 
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
             if (tvOutputTextView != null) tvOutputTextView.setText(text);
+            if (httpReadListener != null) httpReadListener.onHttpReadFinished();
 
 
         }
@@ -74,8 +89,6 @@ public class HttpGetOverURLConnection extends AsyncTask<String, String, String> 
                 return "NULL";
         }
 
-        interface HttpReadListener {
-            void onHttpReadFinished ();
 
-        }
+
 }

@@ -1,12 +1,7 @@
-package com.example.jirka.networkprog1;
+package com.example.jirka.networkprog1.network;
 
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -16,28 +11,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class actURLExample extends AppCompatActivity {
+/**
+ * Created by Jirka on 9.8.2016.
+ */
+public class HttpGetOverURLConnection extends AsyncTask<String, String, String> {
 
-    TextView tvNetworkOutput;
+    TextView tvOutputTextView = null;
+    StringBuffer responseData;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_act_example1);
 
-        tvNetworkOutput =  (TextView) findViewById(R.id.tvNetworkOutput);
-        ((Button) findViewById(R.id.btnRunExample1)).setText("Run URL Example");
-
+    public void  setTvOutputTextView (TextView tv) {
+        this.tvOutputTextView = tv;
     }
-
-
-
-    private class HttpGet extends AsyncTask <String, String, String>{
 
 
         @Override
         protected String doInBackground(String... params) {
-            StringBuffer serverData = new StringBuffer();
+            responseData = new StringBuffer();
             try {
                 HttpURLConnection conn = (HttpURLConnection) new URL(params[0]).openConnection(); // Connect to server and GET request
 
@@ -48,21 +38,15 @@ public class actURLExample extends AppCompatActivity {
 
                 String rawData;
                 while ((rawData = br.readLine()) != null) {
-                    serverData.append(rawData);
+                    responseData.append(rawData);
                 }
 
-                return serverData.toString();
-
-
-
+                return responseData.toString();
 
             } catch (IOException e) {
                 e.printStackTrace();
                 return e.toString();
             }
-
-
-            //return serverData.toString();
         }
 
 
@@ -70,7 +54,7 @@ public class actURLExample extends AppCompatActivity {
         @Override
         protected void onPostExecute(String text) {
             super.onPostExecute(text);
-            tvNetworkOutput.setText(text);
+            if (tvOutputTextView != null) tvOutputTextView.setText(text);
 
 
         }
@@ -78,20 +62,20 @@ public class actURLExample extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(String... status) {
             super.onProgressUpdate(status);
-            Toast.makeText(getApplicationContext(), status[0], Toast.LENGTH_SHORT).show();
+    //        Toast.makeText(getApplicationContext(), status[0], Toast.LENGTH_SHORT).show();
 
 
         }
-    }
 
-    public void btnRunExample1_onClick(View view) {
+        public String getHttpResponseString() {
+            if (responseData !=  null)
+                return responseData.toString();
+            else
+                return "NULL";
+        }
 
-        new HttpGet().execute("http://www.dre.vanderbilt.edu");
-    }
+        interface HttpReadListener {
+            void onHttpReadFinished ();
 
-
-    public void btnToastTest_onClick(View view) {
-        ToastTest.runToastTest(this, "Toast Test v Class");
-    }
-
+        }
 }

@@ -33,7 +33,7 @@ import java.net.URL;
 // implementation see: https://developers.google.com/cloud-messaging/server
 public class GcmSender {
 
-    public static final String API_KEY = "API_KEY";
+    public static final String API_KEY = "AIzaSyD6CfvP-_9nRpyr6hrtnNaTARhwsQ2VPP8";
 
     public static void main(String[] args) {
         if (args.length < 1 || args.length > 2 || args[0] == null) {
@@ -76,6 +76,7 @@ public class GcmSender {
 
             // Send GCM message content.
             OutputStream outputStream = conn.getOutputStream();
+            System.out.println("JSON data to sent:\n" + jGcmData.toString());
             outputStream.write(jGcmData.toString().getBytes());
 
             // Read GCM response.

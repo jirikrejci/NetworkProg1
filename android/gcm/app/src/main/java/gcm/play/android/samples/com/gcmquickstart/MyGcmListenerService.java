@@ -32,6 +32,16 @@ public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
 
+   /*  TOTO BYL POKUS PŘEDAT HANDLER
+    private Handler handler;
+
+    MyGcmListenerService (Handler handler) {
+        super();
+        this.handler = handler;
+    }
+    */
+
+
     /**
      * Called when message is received.
      *
@@ -64,6 +74,9 @@ public class MyGcmListenerService extends GcmListenerService {
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
+
+
+
         sendNotification(message);
         // [END_EXCLUDE]
     }
